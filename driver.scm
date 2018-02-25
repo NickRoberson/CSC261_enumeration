@@ -39,10 +39,31 @@
 (load "enumeration.scm")
 
 ; instantiate data that tests rely on 
-(define model (list (cons 'A #t)
-                    (cons 'B #f)
-                    (cons 'C #t)
-                    (cons 'D #f)))
+(define model
+  (list (cons 'A #t)
+        (cons 'B #f)
+        (cons 'C #t)
+        (cons 'D #f)))
+
+; simpler example
+(define knowledge-base-simple
+  (list 'and
+        (list 'and
+              (list 'and (list '=> 'A 'B) (list '=> 'B 'C))
+              (list '=> 'C 'D))
+        'A))
+(define kb-symbols-simple (get-symbols knowledge-base-simple))
+
+; more complex example
+(define knowledge-base-complex
+  (list 'and 'A
+        (list 'and
+              (list '=> (list 'or 'A 'B) 'C)
+              (list 'and
+                    (list '=> (list 'or 'B 'C) 'A)
+                    (list '<=> (list 'and 'B (list 'not 'D)) 'A)))))
+(define kb-symbols-complex (get-symbols knowledge-base-complex))
+
 
 ; tests for (pl-true? sentence model)
 (define pl-true?-tests
@@ -102,16 +123,37 @@
   (test-suite
    "Tests for tt-entails?"
    (test-case
-    "none yet"
-    (equal? 0 0))))
+    "SIMPLE: { A, A => B, B => C, C => D }  B, C, D?"
+    ; expect all to evaluate to true  
+    (check-equal? (tt-entails? knowledge-base-simple 'B) #t)
+    (check-equal? (tt-entails? knowledge-base-simple 'C) #t)
+    (check-equal? (tt-entails? knowledge-base-simple 'D) #t))
+   (test-case
+    "COMPLEX: {A, A or B => C, B or C => A, B and not D <=> A } C, B, D?"
+    ; expect B = #t, C = #t, D = #f
+    (check-equal? (tt-entails? knowledge-base-complex 'C) #t)
+    (check-equal? (tt-entails? knowledge-base-complex 'B) #t)
+    (check-equal? (tt-entails? knowledge-base-complex 'D) #f))))
+
+
 
 ; tests for (tt-check-all knowledge-base query symbols model)
 (define tt-check-all-tests
   (test-suite
-   "Tests for tt-entails?"
+   "Tests for tt-check-all"
    (test-case
-    "none yet"
-    (equal? 0 0))))
+    "SIMPLE: { A, A => B, B => C, C => D }  B, C, D?"
+    ; expect all to evaluate to true  
+    (check-equal? (tt-check-all knowledge-base-simple 'B kb-symbols-simple null) #t)
+    (check-equal? (tt-check-all knowledge-base-simple 'B kb-symbols-simple null) #t)
+    (check-equal? (tt-check-all knowledge-base-simple 'B kb-symbols-simple null) #t))
+   (test-case
+    "COMPLEX: {A, A or B => C, B or C => A, B and not D <=> A } C, B, D?"
+    ; expect B = #t, C = #t, D = #f
+    (check-equal? (tt-check-all knowledge-base-complex 'C kb-symbols-complex null) #t)
+    (check-equal? (tt-check-all knowledge-base-complex 'B kb-symbols-complex null) #t)
+    (check-equal? (tt-check-all knowledge-base-complex 'D kb-symbols-complex null) #f)
+    )))
 
 
 ; run all tests

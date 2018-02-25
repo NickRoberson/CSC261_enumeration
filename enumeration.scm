@@ -33,7 +33,7 @@
 ;;   A model is an association list whose keys (car of elements) are
 ;;   symbols and whose values (cdr of elements) are booleans.
 
-
+(load "logic.scm")
 
 ;;
 ;; Procedure
@@ -59,7 +59,7 @@
   (lambda (knowledge-base query)
     (tt-check-all knowledge-base 
                   query
-                  (cons query (get-symbols knowledge-base))
+                  (list-union (get-symbols query) (get-symbols knowledge-base))
                   null)))
 
 ;;
@@ -88,7 +88,7 @@
 ;;   knowledge-base is true. Otherwise, entails is false.
 (define tt-check-all
   (lambda (knowledge-base query symbols model)
-    (display symbols)
+    ;(display symbols)
     (if (null? symbols)  ; no symbols left
         (if (pl-true? knowledge-base model)  
             (pl-true? query model) ; (KB => query)?
@@ -96,11 +96,11 @@
         (and (tt-check-all knowledge-base 
                            query 
                            (cdr symbols) 
-                           (list-union (cons (car symbols) #t) model))
+                           (list-union (list (cons (car symbols) #t)) model))
              (tt-check-all knowledge-base
                            query
                            (cdr symbols)
-                           (list-union (cons (car symbols) #f) model))))))
+                           (list-union (list (cons (car symbols) #f)) model))))))
 
 ;;
 ;; Procedure
