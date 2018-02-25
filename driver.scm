@@ -2,9 +2,6 @@
 ;; File
 ;;   driver.scm
 ;;
-;; Author
-;;   Jerod Weinman (Documentation)
-;;
 ;; Summary
 ;;   Provides a collection of tests for the (tt-entails? knowledge-base query),
 ;;   (tt-check-all knowledge-base query symbols model), and (pl-true? sentence
