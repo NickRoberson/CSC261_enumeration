@@ -88,7 +88,8 @@
 ;;   knowledge-base is true. Otherwise, entails is false.
 (define tt-check-all
   (lambda (knowledge-base query symbols model)
-    (if (null? symbols) ; no symbols left
+    (display symbols)
+    (if (null? symbols)  ; no symbols left
         (if (pl-true? knowledge-base model)  
             (pl-true? query model) ; (KB => query)?
             #t) ; false antecedent => true implication 
@@ -124,25 +125,35 @@
 ;;   otherwise.
 (define pl-true?
   (lambda (sentence model)
+    ;(display sentence) (newline)
+    ;(display (cdr sentence)) (newline)
+    ;(display (assq (car sentence) model)) (newline)
     (cond
-      [(boolean? sentence) ; boolean
+      ; boolean
+      [(boolean? sentence) 
        sentence]
-      [(null? (cdr sentence)) ; symbol
-       (cdr (assq (car sentence) model))]
-      [(equal? 'not (car sentence)) ; negation
-       (not (pl-true? (cdr sentence) model))]
-      [(equal? 'and (car sentence)) ; conjunction
-       (and (pl-true? (list (cadr sentence)) model)
-            (pl-true? (cddr sentence) model))]
-      [(equal? 'or (car sentence)) ; disjunction
-       (or (pl-true? (list (cadr sentence)) model)
-           (pl-true? (cddr sentence) model))]
-      [(equal? '=> (car sentence)) ; implication
+      ; symbol
+      [(symbol? sentence) 
+       (cdr (assq sentence model))]
+      ; negation
+      [(equal? 'not (car sentence)) 
+       (not (pl-true? (cadr sentence) model))]
+      ; conjunction
+      [(equal? 'and (car sentence)) 
+       (and (pl-true? (cadr sentence) model)
+            (pl-true? (car (reverse sentence)) model))]
+      ; disjunction
+      [(equal? 'or (car sentence)) 
+       (or (pl-true? (cadr sentence) model)
+           (pl-true? (car (reverse sentence)) model))]
+      ; implication
+      [(equal? '=> (car sentence)) 
        (pl-true? (list 'or 
                        (list 'not (cadr sentence))
-                       (list (cddr sentence)))
+                       (car (reverse sentence))) ; changed to get car or reverse
                  model)]
-      [(equal? '<=> (car sentence)) ; bidirectional implication
+      ; bidirectional implication
+      [(equal? '<=> (car sentence)) 
        (pl-true? (list 'and 
                        (list '=> 
                              (cadr sentence)
@@ -151,9 +162,8 @@
                              (caddr sentence)
                              (cadr sentence)))
                  model)]
-      [else ; invalid
-       (error "sentence is not valid")])))
-
+      ; invalid
+      [else (error "sentence is not valid")])))
 
 
 

@@ -19,10 +19,10 @@
     (check-equal? (pl-true? #f model) #f))
    (test-case
     "symbol #t"
-    (check-equal? (pl-true? (list 'A) model) #t))
+    (check-equal? (pl-true? 'A model) #t))
    (test-case
     "symbol #f"
-    (check-equal? (pl-true? (list 'B) model) #f))
+    (check-equal? (pl-true? 'B model) #f))
    (test-case
     "negation #t"
     (check-equal? (pl-true? (list 'not 'B) model) #t))
@@ -43,22 +43,22 @@
     (check-equal? (pl-true? (list 'or 'B 'D) model) #f))
    (test-case
     "implication #t => #t"
-    (check-equal? (pl-true? (list '=> 'A 'C) model) #t))))
-;   (test-case
-;    "implication #t => #f"
-;    (check-equal? (pl-true? (list '=> 'A 'B) model) #f))
-;   (test-case
-;    "implication #f => #t"
-;    (check-equal? (pl-true? (list '=> 'B 'A) model) #t))
-;   (test-case
-;    "bidirectional implication #t <=> #t"
-;    (check-equal? (pl-true? (list '<=> 'A 'C) model) #t))
-;   (test-case
-;    "bidirectional implication #t <=> #f"
-;    (check-equal? (pl-true? (list '<=> 'A 'B) model) #f))
-;   (test-case
-;    "bidirectional implication #f <=> #f"
-;    (check-equal? (pl-true? (list '<=> 'B 'D) model) #t))))
+    (check-equal? (pl-true? (list '=> 'A 'C) model) #t))
+   (test-case
+    "implication #t => #f"
+    (check-equal? (pl-true? (list '=> 'A 'B) model) #f))
+   (test-case
+    "implication #f => #t"
+    (check-equal? (pl-true? (list '=> 'B 'A) model) #t))
+   (test-case
+    "bidirectional implication #t <=> #t"
+    (check-equal? (pl-true? (list '<=> 'A 'C) model) #t))
+   (test-case
+    "bidirectional implication #t <=> #f"
+    (check-equal? (pl-true? (list '<=> 'A 'B) model) #f))
+   (test-case
+    "bidirectional implication #f <=> #f"
+    (check-equal? (pl-true? (list '<=> 'B 'D) model) #t))))
 
 
 (run-tests pl-true?-tests)
