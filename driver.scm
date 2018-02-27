@@ -1,3 +1,5 @@
+;; Lab: Propositional Logic
+;; CSC 261 
 ;;
 ;; File
 ;;   driver.scm
@@ -144,9 +146,9 @@
    (test-case
     "SIMPLE: { A, A => B, B => C, C => D }  B, C, D?"
     ; expect all to evaluate to true  
+    (check-equal? (tt-check-all knowledge-base-simple 'C kb-symbols-simple null) #t)
     (check-equal? (tt-check-all knowledge-base-simple 'B kb-symbols-simple null) #t)
-    (check-equal? (tt-check-all knowledge-base-simple 'B kb-symbols-simple null) #t)
-    (check-equal? (tt-check-all knowledge-base-simple 'B kb-symbols-simple null) #t))
+    (check-equal? (tt-check-all knowledge-base-simple 'D kb-symbols-simple null) #t))
    (test-case
     "COMPLEX: {A, A or B => C, B or C => A, B and not D <=> A } C, B, D?"
     ; expect B = #t, C = #t, D = #f

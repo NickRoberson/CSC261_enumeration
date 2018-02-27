@@ -1,0 +1,24 @@
+;; Lab: Propositional Logic
+;; CSC 261 
+;;
+;; File
+;;   output.txt
+;;
+;; Summary
+;;   Output of driver.scm
+;;
+;; Provides
+;;   Output
+
+Script started on Sun 25 Feb 2018 04:12:43 PM CST
+$ z[Kmzscheme -l langplt-[K[K[K[K/plt-pretty-big-text.ss -f driver.scm
+Testing (pl-true? sentence model)...
+16 success(es) 0 failure(s) 0 error(s) 16 test(s) run
+Testing (tt-entails? knowledge-base query)...
+2 success(es) 0 failure(s) 0 error(s) 2 test(s) run
+Testing (tt-check-all knowledge-base query symbols model)...
+2 success(es) 0 failure(s) 0 error(s) 2 test(s) run
+$ exit
+exit
+
+Script done on Sun 25 Feb 2018 04:13:05 PM CST

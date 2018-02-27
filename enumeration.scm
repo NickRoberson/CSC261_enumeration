@@ -1,3 +1,5 @@
+;; Lab: Propositional Logic
+;; CSC 261 
 ;;
 ;; File
 ;;   enumeration.scm
